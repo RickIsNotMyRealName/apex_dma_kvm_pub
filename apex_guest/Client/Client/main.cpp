@@ -17,7 +17,7 @@ typedef struct player
 	char name[33] = { 0 };
 }player;
 
-int aim_key = VK_RBUTTON;
+int aim_key = VK_MBUTTON;
 bool use_nvidia = true;
 bool active = true;
 bool ready = false;
