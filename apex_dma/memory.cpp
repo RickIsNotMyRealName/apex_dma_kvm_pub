@@ -79,7 +79,7 @@ void Memory::open_proc(const char* name)
     if(!conn)
     {
         ConnectorInventory *inv = inventory_scan();
-        conn = inventory_create_connector(inv, "qemu_procfs", "");
+        conn = inventory_create_connector(inv, "kvm", "");
         inventory_free(inv);
     }
 
