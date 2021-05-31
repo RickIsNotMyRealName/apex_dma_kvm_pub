@@ -692,6 +692,11 @@ static void item_glow_t()
 					if(item.isItem() && !item.isGlowing())
 					{
 						item.enableGlow();
+						int testVar;
+						apex_mem.Read<int>(g_Base + 0x16d8, testVar);
+						printf("Base: %lx\n", testVar);
+
+
 					}
 				}
 				k=1;
