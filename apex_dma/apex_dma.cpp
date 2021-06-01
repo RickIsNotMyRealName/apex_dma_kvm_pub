@@ -693,7 +693,9 @@ static void item_glow_t()
 					uint64_t centity = 0;
 					apex_mem.Read<uint64_t>(entitylist + ((uint64_t)i << 5), centity);
 					if (centity == 0) continue;
+					printf("Base: %lx\n", centity);
 					Item item = getItem(centity);
+
 
 					if(item.isItem() && !item.isGlowing())
 					{
