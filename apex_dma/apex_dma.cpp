@@ -701,6 +701,7 @@ static void item_glow_t()
 					{
 						item.enableGlow();
 						printf("Base: %lx\n", centity);
+						std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
 					}
 				}
