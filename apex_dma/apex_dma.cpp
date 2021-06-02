@@ -700,8 +700,8 @@ static void item_glow_t()
 					if(item.isItem() && !item.isGlowing())
 					{
 						item.enableGlow();
-						char name[32] = item.get_name(name);
-						printf("Item: %lx\n", centity);
+						std::string name = item.get_name();
+						printf("Item: %lx\n", name);
 
 					}
 				}

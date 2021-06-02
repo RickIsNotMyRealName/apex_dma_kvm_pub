@@ -59,7 +59,7 @@ public:
 	void enableGlow();
 	void disableGlow();
 
-	void get_name(char* name);
+	std::string Item::get_name();
 };
 
 class WeaponXEntity

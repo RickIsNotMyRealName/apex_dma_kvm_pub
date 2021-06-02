@@ -205,9 +205,11 @@ Vector Item::getPosition()
 	return *(Vector*)(buffer + OFFSET_ORIGIN);
 }
 
-void Item::get_name(char* name)
+std::string Item::get_name()
 {
-	name = *(char*)(buffer + OFFSET_SIGN_NAME);
+	
+	return *(string*)(buffer + OFFSET_SIGN_NAME);
+
 }
 float CalculateFov(Entity& from, Entity& target)
 {
