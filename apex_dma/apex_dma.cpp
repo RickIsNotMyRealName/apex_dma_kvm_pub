@@ -277,7 +277,7 @@ void DoActions()
 
 			int testVar;
 			apex_mem.Read<int>(g_Base + 0x16d8, testVar);
-			printf("Base: %lx\n", testVar);
+			//printf("Base: %lx\n", testVar);
 		}
 		
 
