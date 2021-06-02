@@ -58,6 +58,8 @@ public:
 	
 	void enableGlow();
 	void disableGlow();
+
+	void get_name(char* name);
 };
 
 class WeaponXEntity

@@ -700,7 +700,8 @@ static void item_glow_t()
 					if(item.isItem() && !item.isGlowing())
 					{
 						item.enableGlow();
-						//printf("Base: %lx\n", centity);
+						char name[32] = item.get_name(name);
+						printf("Item: %lx\n", centity);
 
 					}
 				}

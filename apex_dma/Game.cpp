@@ -183,6 +183,8 @@ bool Item::isItem()
 	return strncmp(class_name, "CPropSurvival", 13) == 0;
 }
 
+
+
 bool Item::isGlowing()
 {
 	return *(int*)(buffer + OFFSET_ITEM_GLOW) == 1363184265;
@@ -203,6 +205,10 @@ Vector Item::getPosition()
 	return *(Vector*)(buffer + OFFSET_ORIGIN);
 }
 
+void Item::get_name(char* name)
+{
+	name = *(char*)(buffer + OFFSET_SIGN_NAME);
+}
 float CalculateFov(Entity& from, Entity& target)
 {
 	QAngle ViewAngles = from.GetViewAngles();
