@@ -205,12 +205,6 @@ Vector Item::getPosition()
 	return *(Vector*)(buffer + OFFSET_ORIGIN);
 }
 
-std::string Item::get_name()
-{
-	
-	return *(std::string*)(buffer + OFFSET_SIGN_NAME);
-
-}
 float CalculateFov(Entity& from, Entity& target)
 {
 	QAngle ViewAngles = from.GetViewAngles();
