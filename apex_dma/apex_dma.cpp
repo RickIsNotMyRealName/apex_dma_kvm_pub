@@ -12,7 +12,7 @@
 Memory apex_mem;
 Memory client_mem;
 
-bool firing_range = true;
+bool firing_range = false;
 bool active = true;
 uintptr_t aimentity = 0;
 uintptr_t tmp_aimentity = 0;
