@@ -38,10 +38,15 @@ float max_fov = 15.0f;
 int bone = 2;
 bool thirdperson = false;
 
+int glowMode = 101;
+int BorderGlowMode = 102;
+int BorderSize = 46;
+int TransparentLevel = 96;
+
 bool valid = false; //write
 bool next = false; //read write
 
-uint64_t add[18];
+uint64_t add[21];
 
 bool k_f5 = 0;
 bool k_f6 = 0;
@@ -139,6 +144,11 @@ int main(int argc, char** argv)
 	add[15] = (uintptr_t)&max_fov;
 	add[16] = (uintptr_t)&bone;
 	add[17] = (uintptr_t)&thirdperson;
+	add[17] = (uintptr_t)&glowMode;
+	add[17] = (uintptr_t)&BorderGlowMode;
+	add[17] = (uintptr_t)&BorderSize;
+	add[17] = (uintptr_t)&TransparentLevel;
+	
 	printf(XorStr("add offset: 0x%I64x\n"), (uint64_t)&add[0] - (uint64_t)GetModuleHandle(NULL));
 	Overlay ov1 = Overlay();
 	ov1.Start();

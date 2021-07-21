@@ -38,7 +38,7 @@ public:
 	QAngle GetRecoil();
 	Vector GetViewAnglesV();
 
-	void enableGlow();
+	void enableGlow(GlowMode glow);
 	void disableGlow();
 	void SetViewAngles(SVector angles);
 	void SetViewAngles(QAngle& angles);
@@ -82,6 +82,11 @@ struct ClientClass {
 	uint64_t pNext;
 	uint32_t ClassID;
 	uint32_t ClassSize;
+};
+
+struct GlowMode
+{
+	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
 };
 
 Entity getEntity(uintptr_t ptr);

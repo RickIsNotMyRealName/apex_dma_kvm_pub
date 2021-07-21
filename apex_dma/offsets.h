@@ -41,6 +41,7 @@
 
     #define OFFSET_ITEM_GLOW            0x2c0 //m_highlightFunctionBits
 
+    #define GLOW_TYPE 0x2C4 //0x2C4 //OK Script_Highlight_GetState + 4 / m_highlightFunctionBits  + 4?
     #define OFFSET_GLOW_T1              0x262 //16256 = enabled, 0 = disabled 
     #define OFFSET_GLOW_T2              0x2dc //1193322764 = enabled, 0 = disabled 
     #define OFFSET_GLOW_ENABLE          0x3c8 //7 = enabled, 2 = disabled

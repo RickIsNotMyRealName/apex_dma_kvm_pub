@@ -34,6 +34,10 @@ bool aiming = false;
 extern float smooth;
 extern int bone;
 bool thirdperson = false;
+int glowMode = 101;
+int BorderGlowMode = 102;
+int BorderSize = 46;
+int TransparentLevel = 96;
 
 bool actions_t = false;
 bool esp_t = false;
@@ -198,7 +202,7 @@ void DoActions()
 
 					if(player_glow && !Target.isGlowing())
 					{
-						Target.enableGlow();
+						Target.enableGlow({});
 					}
 					else if(!player_glow && Target.isGlowing())
 					{
@@ -618,6 +622,19 @@ static void set_vars(uint64_t add_addr)
 	uint64_t thirdperson_addr = 0;
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*17, thirdperson_addr);
 
+	uint64_t glowMode_addr = 0;
+	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*18, glowMode_addr);
+
+	uint64_t BorderGlowMode_addr = 0;
+	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*19, BorderGlowMode_addr);	
+	
+	uint64_t BorderSize_addr = 0;
+	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*19, BorderSize_addr);	
+	
+	uint64_t TransparentLevel_addr = 0;
+	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*20, TransparentLevel_addr);	
+	
+	uint64_t thirdperson_addr = 0;
 	int tmp = 0;
 	client_mem.Read<int>(spec_addr, tmp);
 	
@@ -653,6 +670,11 @@ static void set_vars(uint64_t add_addr)
 			client_mem.Read<float>(max_fov_addr, max_fov);
 			client_mem.Read<int>(bone_addr, bone);
 			client_mem.Read<bool>(thirdperson_addr, thirdperson);
+
+			client_mem.Read<bool>(glowMode_addr, glowMode);
+			client_mem.Read<bool>(BorderGlowMode_addr, BorderGlowMode);
+			client_mem.Read<bool>(BorderSize_addr, BorderSize);
+			client_mem.Read<bool>(TransparentLevel_addr, TransparentLevel);
 
 			if(esp && next)
 			{

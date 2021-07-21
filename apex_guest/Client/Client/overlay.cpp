@@ -15,6 +15,10 @@ extern float smooth;
 extern float max_fov;
 extern int bone;
 extern bool thirdperson;
+extern int glowMode;
+extern int BorderGlowMode;
+extern int BorderSize;
+extern int TransparentLevel;
 int width;
 int height;
 bool k_leftclick = false;
@@ -201,6 +205,15 @@ void Overlay::RenderMenu()
 			ImGui::Checkbox(XorStr("Health bar"), &v.healthbar);
 			ImGui::Checkbox(XorStr("Shield bar"), &v.shieldbar);
 			ImGui::EndTabItem();
+		}
+		if(ImGui::BeginTabItem(XorStr("Testing")))
+		{
+			ImGui::Text(XorStr("Testing GlowMode Params:"));
+
+			ImGui::SliderInt(XorStr("##1"), &glowMode, 0, 175);
+			ImGui::SliderInt(XorStr("##2"), &BorderGlowMode, 0, 175);
+			ImGui::SliderInt(XorStr("##3"), &BorderSize, 0, 175);
+			ImGui::SliderInt(XorStr("##4"), &TransparentLevel, 0, 175);
 		}
 		ImGui::EndTabBar();
 	}
