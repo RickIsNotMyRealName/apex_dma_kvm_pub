@@ -153,6 +153,7 @@ void DoActions()
 		bool tmp_thirdperson = false;
 		while (g_Base!=0 && c_Base!=0)
 		{
+			GlowMode glowShit ={glowMode,BorderGlowMode,BorderSize,TransparentLevel};
 			std::this_thread::sleep_for(std::chrono::milliseconds(30));	
 			if(thirdperson && !tmp_thirdperson)
 			{
@@ -207,7 +208,8 @@ void DoActions()
 
 					if(player_glow && !Target.isGlowing())
 					{
-						Target.enableGlow({});
+						
+						Target.enableGlow(glowShit);
 					}
 					else if(!player_glow && Target.isGlowing())
 					{
@@ -269,7 +271,7 @@ void DoActions()
 
 					if(player_glow && !Target.isGlowing())
 					{
-						Target.enableGlow();
+						Target.enableGlow(glowShit);
 					}
 					else if(!player_glow && Target.isGlowing())
 					{
