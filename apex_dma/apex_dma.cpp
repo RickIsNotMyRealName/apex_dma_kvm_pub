@@ -67,10 +67,7 @@ typedef struct player
 	char name[33] = { 0 };
 }player;
 
-struct GlowMode
-{
-	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
-};
+
 
 struct Matrix
 {
@@ -208,7 +205,6 @@ void DoActions()
 
 					if(player_glow && !Target.isGlowing())
 					{
-						
 						Target.enableGlow(glowShit);
 					}
 					else if(!player_glow && Target.isGlowing())
