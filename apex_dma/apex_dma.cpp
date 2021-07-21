@@ -67,6 +67,11 @@ typedef struct player
 	char name[33] = { 0 };
 }player;
 
+struct GlowMode
+{
+	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
+};
+
 struct Matrix
 {
 	float matrix[16];
@@ -634,7 +639,6 @@ static void set_vars(uint64_t add_addr)
 	uint64_t TransparentLevel_addr = 0;
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*20, TransparentLevel_addr);	
 	
-	uint64_t thirdperson_addr = 0;
 	int tmp = 0;
 	client_mem.Read<int>(spec_addr, tmp);
 	
@@ -671,10 +675,10 @@ static void set_vars(uint64_t add_addr)
 			client_mem.Read<int>(bone_addr, bone);
 			client_mem.Read<bool>(thirdperson_addr, thirdperson);
 
-			client_mem.Read<bool>(glowMode_addr, glowMode);
-			client_mem.Read<bool>(BorderGlowMode_addr, BorderGlowMode);
-			client_mem.Read<bool>(BorderSize_addr, BorderSize);
-			client_mem.Read<bool>(TransparentLevel_addr, TransparentLevel);
+			client_mem.Read<int>(glowMode_addr, glowMode);
+			client_mem.Read<int>(BorderGlowMode_addr, BorderGlowMode);
+			client_mem.Read<int>(BorderSize_addr, BorderSize);
+			client_mem.Read<int>(TransparentLevel_addr, TransparentLevel);
 
 			if(esp && next)
 			{

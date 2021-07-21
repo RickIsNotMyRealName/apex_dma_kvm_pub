@@ -84,10 +84,7 @@ struct ClientClass {
 	uint32_t ClassSize;
 };
 
-struct GlowMode
-{
-	int8_t GeneralGlowMode, BorderGlowMode, BorderSize, TransparentLevel;
-};
+
 
 Entity getEntity(uintptr_t ptr);
 Item getItem(uintptr_t ptr);
