@@ -585,7 +585,7 @@ static void AimbotLoop()
 
 static void set_vars(uint64_t add_addr, uint64_t add_off2)
 {
-	uint64_t test =add_off2
+	uint64_t test = add_off2;
 	printf("Reading client vars...\n");
 	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	//Get addresses of client vars
@@ -713,6 +713,7 @@ static void item_glow_t()
 			uint64_t entitylist = g_Base + OFFSET_ENTITYLIST;
 			if (item_glow)
 			{
+				GlowMode glowShit = { glowMode,BorderGlowMode,BorderSize,TransparentLevel };
 				for (int i = 0; i < 10000; i++)
 				{
 					uint64_t centity = 0;
@@ -724,7 +725,7 @@ static void item_glow_t()
 
 					if(item.isItem() && !item.isGlowing())
 					{
-						item.enableGlow();
+						item.enableGlow(glowShit);
 						//printf("Item: %lx\n", name);
 
 					}
@@ -843,7 +844,7 @@ int main(int argc, char *argv[])
 				printf("\nClient process found\n");
 				printf("Base: %lx\n", c_Base);
 
-				vars_thr = std::thread(set_vars, c_Base + add_off, c_base + add_off2);
+				vars_thr = std::thread(set_vars, c_Base + add_off, c_Base + add_off2);
 				vars_thr.detach();
 			}
 		}

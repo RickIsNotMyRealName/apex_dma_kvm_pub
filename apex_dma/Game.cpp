@@ -192,9 +192,14 @@ bool Item::isGlowing()
 	return *(int*)(buffer + OFFSET_ITEM_GLOW) == 1363184265;
 }
 
-void Item::enableGlow()
+void Item::enableGlow(GlowMode glow)
 {
-	apex_mem.Write<int>(ptr + OFFSET_ITEM_GLOW, 1363184265);
+	apex_mem.Write<GlowMode>(ptr + GLOW_TYPE, glow);
+
+	apex_mem.Write<int>(ptr + OFFSET_GLOW_T1, 16256);
+	apex_mem.Write<int>(ptr + OFFSET_GLOW_T2, 1193322764);
+	apex_mem.Write<int>(ptr + OFFSET_GLOW_ENABLE, 7);
+	apex_mem.Write<int>(ptr + OFFSET_GLOW_THROUGH_WALLS, 2);
 }
 
 void Item::disableGlow()
