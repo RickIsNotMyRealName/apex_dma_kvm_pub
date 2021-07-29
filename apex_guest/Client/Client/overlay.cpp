@@ -214,7 +214,7 @@ void Overlay::RenderMenu()
 			ImGui::SliderInt(XorStr("##1"), &glowMode, 0, 175);
 
 			ImGui::Text(XorStr("BorderGlowMode"));
-			ImGui::SliderInt(XorStr("##1"), &BorderGlowMode, 0, 175);
+			ImGui::SliderInt(XorStr("##2"), &BorderGlowMode, 0, 175);
 
 			ImGui::Text(XorStr("BorderSize"));
 			ImGui::SliderInt(XorStr("##3"), &BorderSize, 0, 175);

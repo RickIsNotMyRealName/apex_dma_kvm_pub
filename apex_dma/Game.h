@@ -57,7 +57,7 @@ public:
 	bool isItem();
 	bool isGlowing();
 	
-	void enableGlow();
+	void enableGlow(GlowMode glow);
 	void disableGlow();
 };
 

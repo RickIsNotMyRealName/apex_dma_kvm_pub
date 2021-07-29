@@ -630,13 +630,13 @@ static void set_vars(uint64_t add_addr, uint64_t add_off2)
 	client_mem.Read<uint64_t>(test, glowMode_addr);
 
 	uint64_t BorderGlowMode_addr = 0;
-	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*2, BorderGlowMode_addr);	
+	client_mem.Read<uint64_t>(test + sizeof(uint64_t), BorderGlowMode_addr);	
 	
 	uint64_t BorderSize_addr = 0;
-	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*3, BorderSize_addr);	
+	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*2, BorderSize_addr);	
 	
 	uint64_t TransparentLevel_addr = 0;
-	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*4, TransparentLevel_addr);	
+	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*3, TransparentLevel_addr);	
 	
 	int tmp = 0;
 	client_mem.Read<int>(spec_addr, tmp);
