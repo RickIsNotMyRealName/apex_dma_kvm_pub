@@ -210,9 +210,16 @@ void Overlay::RenderMenu()
 		{
 			ImGui::Text(XorStr("Testing GlowMode Params:"));
 
+			ImGui::Text(XorStr("GlowMode"));
 			ImGui::SliderInt(XorStr("##1"), &glowMode, 0, 175);
-			ImGui::SliderInt(XorStr("##2"), &BorderGlowMode, 0, 175);
+
+			ImGui::Text(XorStr("BorderGlowMode"));
+			ImGui::SliderInt(XorStr("##1"), &BorderGlowMode, 0, 175);
+
+			ImGui::Text(XorStr("BorderSize"));
 			ImGui::SliderInt(XorStr("##3"), &BorderSize, 0, 175);
+
+			ImGui::Text(XorStr("Max FOV:"));
 			ImGui::SliderInt(XorStr("##4"), &TransparentLevel, 0, 175);
 		}
 		ImGui::EndTabBar();

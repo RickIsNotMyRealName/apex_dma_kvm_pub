@@ -627,7 +627,7 @@ static void set_vars(uint64_t add_addr, uint64_t add_off2)
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*17, thirdperson_addr);
 
 	uint64_t glowMode_addr = 0;
-	client_mem.Read<uint64_t>(test + sizeof(uint64_t), glowMode_addr);
+	client_mem.Read<uint64_t>(test, glowMode_addr);
 
 	uint64_t BorderGlowMode_addr = 0;
 	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*2, BorderGlowMode_addr);	
@@ -710,10 +710,11 @@ static void item_glow_t()
 		while(g_Base!=0 && c_Base!=0)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			GlowMode glowShit = { glowMode,BorderGlowMode,BorderSize,TransparentLevel };
 			uint64_t entitylist = g_Base + OFFSET_ENTITYLIST;
 			if (item_glow)
 			{
-				GlowMode glowShit = { glowMode,BorderGlowMode,BorderSize,TransparentLevel };
+				
 				for (int i = 0; i < 10000; i++)
 				{
 					uint64_t centity = 0;
@@ -726,6 +727,7 @@ static void item_glow_t()
 					if(item.isItem() && !item.isGlowing())
 					{
 						item.enableGlow(glowShit);
+						printf("glowMode: %i, BorderGlowMode: %i,BorderSize: %i,TransparentLevel: %i, \n", glowMode,BorderGlowMode,BorderSize,TransparentLevel);
 						//printf("Item: %lx\n", name);
 
 					}
