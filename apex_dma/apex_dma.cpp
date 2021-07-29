@@ -585,6 +585,7 @@ static void AimbotLoop()
 
 static void set_vars(uint64_t add_addr)
 {
+	uint64_t test = c_Base + add_addr2;
 	printf("Reading client vars...\n");
 	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	//Get addresses of client vars
@@ -626,16 +627,16 @@ static void set_vars(uint64_t add_addr)
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*17, thirdperson_addr);
 
 	uint64_t glowMode_addr = 0;
-	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*18, glowMode_addr);
+	client_mem.Read<uint64_t>(test + sizeof(uint64_t), glowMode_addr);
 
 	uint64_t BorderGlowMode_addr = 0;
-	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*19, BorderGlowMode_addr);	
+	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*2, BorderGlowMode_addr);	
 	
 	uint64_t BorderSize_addr = 0;
-	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*19, BorderSize_addr);	
+	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*3, BorderSize_addr);	
 	
 	uint64_t TransparentLevel_addr = 0;
-	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*20, TransparentLevel_addr);	
+	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*4, TransparentLevel_addr);	
 	
 	int tmp = 0;
 	client_mem.Read<int>(spec_addr, tmp);
@@ -769,7 +770,8 @@ int main(int argc, char *argv[])
 	//const char* ap_proc = "EasyAntiCheat_launcher.exe";
 
 	//Client "add" offset
-	uint64_t add_off = 0x3e890;
+	uint64_t add_off = 0x3e8b0;
+	uint64_t add_off2 = 0x3c940;
 
 	std::thread aimbot_thr;
 	std::thread esp_thr;

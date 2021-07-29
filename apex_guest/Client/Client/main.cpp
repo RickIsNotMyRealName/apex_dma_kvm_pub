@@ -46,7 +46,8 @@ int TransparentLevel = 96;
 bool valid = false; //write
 bool next = false; //read write
 
-uint64_t add[21];
+uint64_t add[22];
+uint64_t add2[4];
 
 bool k_f5 = 0;
 bool k_f6 = 0;
@@ -144,12 +145,13 @@ int main(int argc, char** argv)
 	add[15] = (uintptr_t)&max_fov;
 	add[16] = (uintptr_t)&bone;
 	add[17] = (uintptr_t)&thirdperson;
-	add[18] = (uintptr_t)&glowMode;
-	add[19] = (uintptr_t)&BorderGlowMode;
-	add[20] = (uintptr_t)&BorderSize;
-	add[21] = (uintptr_t)&TransparentLevel;
+	add2[0] = (uintptr_t)&glowMode;
+	add2[1] = (uintptr_t)&BorderGlowMode;
+	add2[2] = (uintptr_t)&BorderSize;
+	add2[3] = (uintptr_t)&TransparentLevel;
 	
 	printf(XorStr("add offset: 0x%I64x\n"), (uint64_t)&add[0] - (uint64_t)GetModuleHandle(NULL));
+	printf(XorStr("add offset: 0x%I64x\n"), (uint64_t)&add2[0] - (uint64_t)GetModuleHandle(NULL));
 	Overlay ov1 = Overlay();
 	ov1.Start();
 	printf(XorStr("Waiting for host process...\n"));
