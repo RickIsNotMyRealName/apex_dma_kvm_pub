@@ -583,9 +583,9 @@ static void AimbotLoop()
 	aim_t = false;
 }
 
-static void set_vars(uint64_t add_addr)
+static void set_vars(uint64_t add_addr, uint64_t add_off2)
 {
-	uint64_t test = c_Base + add_addr2;
+	uint64_t test =add_off2
 	printf("Reading client vars...\n");
 	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	//Get addresses of client vars
@@ -843,7 +843,7 @@ int main(int argc, char *argv[])
 				printf("\nClient process found\n");
 				printf("Base: %lx\n", c_Base);
 
-				vars_thr = std::thread(set_vars, c_Base + add_off);
+				vars_thr = std::thread(set_vars, c_Base + add_off, c_base + add_off2);
 				vars_thr.detach();
 			}
 		}
