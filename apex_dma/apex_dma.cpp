@@ -776,6 +776,7 @@ int main(int argc, char *argv[])
 	uint64_t add_off = 0x3e8b0;
 	uint64_t add_off2 = 0x3c940;
 
+
 	std::thread aimbot_thr;
 	std::thread esp_thr;
 	std::thread actions_thr;
