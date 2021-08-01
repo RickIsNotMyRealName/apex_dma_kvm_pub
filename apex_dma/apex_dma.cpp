@@ -267,7 +267,7 @@ void DoActions()
 
 					if(player_glow && !Target.isGlowing())
 					{
-						Target.enableGlow(glowShit);
+						Target.enableGlow();
 					}
 					else if(!player_glow && Target.isGlowing())
 					{

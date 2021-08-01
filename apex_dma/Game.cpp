@@ -133,7 +133,7 @@ bool Entity::isZooming()
 
 void Entity::enableGlow(GlowMode glow)
 {
-	apex_mem.Write<GlowMode>(ptr + GLOW_TYPE,glow);
+	//apex_mem.Write<GlowMode>(ptr + GLOW_TYPE,glow);
 
 	apex_mem.Write<int>(ptr + OFFSET_GLOW_T1, 16256);
 	apex_mem.Write<int>(ptr + OFFSET_GLOW_T2, 1193322764);
