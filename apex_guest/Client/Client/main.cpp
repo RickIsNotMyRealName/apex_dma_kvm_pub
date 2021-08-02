@@ -42,6 +42,7 @@ int bone = 2;
 bool thirdperson = false;
 Vector radarPos = {0.f, 0.f, 0.f};
 Vector radarSiz = {0.f, 0.f, 0.f};
+float zoom = 1.5;
 
 bool radar = true;
 int radarType = 3;
@@ -51,7 +52,7 @@ bool resetRadar = true;
 bool valid = false; //write
 bool next = false; //read write
 
-uint64_t add[22];
+uint64_t add[20];
 
 bool k_f5 = 0;
 bool k_f6 = 0;
@@ -185,7 +186,7 @@ void Overlay::drawRadar()
 		for(int i = 0; i <= 100;i++)
 		{
 		
-			int s = 4;
+			int s = 1;
 			if(players[i].visible == true)
 			{
 				clr = RED;
@@ -252,6 +253,7 @@ int main(int argc, char** argv)
 	add[17] = (uintptr_t)&thirdperson;
 	add[18] = (uintptr_t)&radarPos;
 	add[19] = (uintptr_t)&radarSiz;
+	add[20] = (uintptr_t)&zoom;
 	
 	printf(XorStr("add offset: 0x%I64x\n"), (uint64_t)&add[0] - (uint64_t)GetModuleHandle(NULL));
 	Overlay ov1 = Overlay();

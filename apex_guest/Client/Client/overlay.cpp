@@ -18,6 +18,7 @@ extern int bone;
 extern bool thirdperson;
 extern bool radar;
 extern int radarType;
+extern float zoom;
 
 int width;
 int height;
@@ -213,6 +214,7 @@ void Overlay::RenderMenu()
 			ImGui::Checkbox(XorStr("Enabled: "),&radar);
 			ImGui::Text(XorStr("Radar Type:"));
 			ImGui::SliderInt(XorStr("##5"), &radarType, 0, 3);
+			ImGui::SliderFloat(XorStr("##3"), &zoom, 0.f, 3.f, "%.2f");
 		}
 		ImGui::EndTabBar();
 	}

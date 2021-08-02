@@ -48,6 +48,7 @@ extern int bone;
 bool thirdperson = false;
 Vector radarPos = {0.f, 0.f, 0.f};
 Vector radarSiz = {0.f, 0.f, 0.f};
+float zoom = 1.5f
 
 bool actions_t = false;
 bool esp_t = false;
@@ -510,7 +511,7 @@ static void EspLoop()
 							int health = Target.getHealth();
 							int shield = Target.getShield();
 							bool checkVeiw = false;
-							Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y, 1.5f, &checkVeiw);
+							Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y, zoom, &checkVeiw);
 							players[i] =
 							{
 								dist,
@@ -659,6 +660,9 @@ static void set_vars(uint64_t add_addr)
 	uint64_t radarSiz_addr = 0;
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*19, radarSiz_addr);
 	
+	uint64_t zoom_addr = 0;
+	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t) * 20, zoom_addr);
+
 	int tmp = 0;
 	client_mem.Read<int>(spec_addr, tmp);
 	
@@ -697,6 +701,7 @@ static void set_vars(uint64_t add_addr)
 
 			client_mem.Read<Vector>(radarPos_addr, radarPos);
 			client_mem.Read<Vector>(radarSiz_addr, radarSiz);
+			client_mem.Read<float>(zoom_addr, zoom);
 
 			//client_mem.Read<int>(glowMode_addr, glowMode);
 			//client_mem.Read<int>(BorderGlowMode_addr, BorderGlowMode);
@@ -796,7 +801,7 @@ int main(int argc, char *argv[])
 	//const char* ap_proc = "EasyAntiCheat_launcher.exe";
 
 	//Client "add" offset
-	uint64_t add_off = 0x3e8b0;
+	uint64_t add_off = 0x3c950;
 
 
 	std::thread aimbot_thr;
