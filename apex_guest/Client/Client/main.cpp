@@ -32,14 +32,17 @@ bool esp = false; //read
 int safe_level = 0; //read
 bool item_glow = false;
 bool player_glow = false;
-bool aim_no_recoil = true;
+bool aim_no_recoil = false;
 bool aiming = false; //read
 uint64_t g_Base = 0; //write
 float max_aim_dist = 200.0f*40.0f; //read
-float smooth = 12.0f;
+float smooth = 150.0f;
 float max_fov = 15.0f;
 int bone = 2;
 bool thirdperson = false;
+Vector radarPos = {0.f, 0.f, 0.f};
+Vector radarSiz = {0.f, 0.f, 0.f};
+
 bool radar = true;
 int radarType = 3;
 int radarAlpha = 255;
@@ -164,6 +167,10 @@ void Overlay::drawRadar()
 	{
 		ImVec2 siz = ImGui::GetWindowSize();
 		ImVec2 pos = ImGui::GetWindowPos();
+		radarPos.x = pos.x;
+		radarPos.y = pos.y;
+		radarSiz.x = siz.x;
+		radarSiz.y = siz.y;
 		if (resetRadar)
 		{
 			ImGui::SetWindowSize(ImVec2(200, 200));
@@ -243,7 +250,8 @@ int main(int argc, char** argv)
 	add[15] = (uintptr_t)&max_fov;
 	add[16] = (uintptr_t)&bone;
 	add[17] = (uintptr_t)&thirdperson;
-
+	add[18] = (uintptr_t)&radarPos;
+	add[19] = (uintptr_t)&radarSiz;
 	
 	printf(XorStr("add offset: 0x%I64x\n"), (uint64_t)&add[0] - (uint64_t)GetModuleHandle(NULL));
 	Overlay ov1 = Overlay();

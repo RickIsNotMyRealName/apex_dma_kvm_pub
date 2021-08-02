@@ -212,7 +212,7 @@ void Overlay::RenderMenu()
 		{
 			ImGui::Checkbox(XorStr("Enabled: "),&radar);
 			ImGui::Text(XorStr("Radar Type:"));
-			ImGui::SliderInt(XorStr("##5"), &radarType, 0, 175);
+			ImGui::SliderInt(XorStr("##5"), &radarType, 0, 3);
 		}
 		ImGui::EndTabBar();
 	}

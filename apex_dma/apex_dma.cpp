@@ -46,6 +46,8 @@ bool aiming = false;
 extern float smooth;
 extern int bone;
 bool thirdperson = false;
+Vector radarPos = {0.f, 0.f, 0.f};
+Vector radarSiz = {0.f, 0.f, 0.f};
 
 bool actions_t = false;
 bool esp_t = false;
@@ -451,6 +453,11 @@ static void EspLoop()
 				}	
 				else
 				{
+					xAxis_Radar = radarPos.x;
+					yAxis_Radar = radarPos.y;
+					width_Radar = radarSiz.x;
+					height_Radar = radarSiz.y;
+
 					for (int i = 0; i < toRead; i++)
 					{
 						uint64_t centity = 0;
@@ -503,7 +510,7 @@ static void EspLoop()
 							int health = Target.getHealth();
 							int shield = Target.getShield();
 							bool checkVeiw = false;
-							Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y,2.f, &checkVeiw);
+							Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y, 1.5f, &checkVeiw);
 							players[i] =
 							{
 								dist,
@@ -645,6 +652,12 @@ static void set_vars(uint64_t add_addr)
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*16, bone_addr);
 	uint64_t thirdperson_addr = 0;
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*17, thirdperson_addr);	
+
+	uint64_t radarPos_addr = 0;
+	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*18, radarPos_addr);
+
+	uint64_t radarSiz_addr = 0;
+	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*19, radarSiz_addr);
 	
 	int tmp = 0;
 	client_mem.Read<int>(spec_addr, tmp);
@@ -681,6 +694,9 @@ static void set_vars(uint64_t add_addr)
 			client_mem.Read<float>(max_fov_addr, max_fov);
 			client_mem.Read<int>(bone_addr, bone);
 			client_mem.Read<bool>(thirdperson_addr, thirdperson);
+
+			client_mem.Read<Vector>(radarPos_addr, radarPos);
+			client_mem.Read<Vector>(radarSiz_addr, radarSiz);
 
 			//client_mem.Read<int>(glowMode_addr, glowMode);
 			//client_mem.Read<int>(BorderGlowMode_addr, BorderGlowMode);
