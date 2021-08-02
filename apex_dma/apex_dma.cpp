@@ -12,6 +12,18 @@
 Memory apex_mem;
 Memory client_mem;
 
+bool Radar = true;
+bool teamRadar = false;
+bool enemyRadar = true;
+int xAxis_Radar = 0;
+int yAxis_Radar = 400;
+int radartype = 0;
+int width_Radar = 250;
+int height_Radar = 250;
+int distance_Radar = 400;
+
+
+
 bool firing_range = false;
 bool active = true;
 uintptr_t aimentity = 0;
@@ -65,6 +77,7 @@ typedef struct player
 	int health = 0;
 	int shield = 0;
 	char name[33] = { 0 };
+	Vector single;
 }player;
 
 
@@ -494,8 +507,8 @@ static void EspLoop()
 							float boxMiddle = bs.x - (width / 2.0f);
 							int health = Target.getHealth();
 							int shield = Target.getShield();
-							
-							players[i] = 
+							Vector rotate_Poiont = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y,2.f,false);
+							players[i] =
 							{
 								dist,
 								entity_team,
@@ -508,7 +521,8 @@ static void EspLoop()
 								Target.isKnocked(),
 								(Target.lastVisTime() > lastvis_esp[i]),
 								health,
-								shield
+								shield,
+								rotate_Poiont
 							};
 							Target.get_name(g_Base, i-1, &players[i].name[0]);
 							lastvis_esp[i] = Target.lastVisTime();
@@ -526,6 +540,17 @@ static void EspLoop()
 		}
 	}
 	esp_t = false;
+}
+
+static void radarLoop()
+{
+	while(true)
+	{
+		for(int i = 0; i <100;i++)
+		{
+			
+		}
+	}
 }
 
 static void AimbotLoop()
@@ -726,7 +751,7 @@ static void item_glow_t()
 
 					if(item.isItem() && !item.isGlowing())
 					{
-						item.enableGlow(glowShit);
+						item.enableGlow();
 						printf("glowMode: %i, BorderGlowMode: %i,BorderSize: %i,TransparentLevel: %i, \n", glowMode,BorderGlowMode,BorderSize,TransparentLevel);
 						//printf("Item: %lx\n", name);
 

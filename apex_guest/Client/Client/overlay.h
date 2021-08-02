@@ -45,6 +45,7 @@ public:
 	int getHeight();
 	void RenderInfo();
 	void RenderMenu();
+	void drawRadar();
 	void RenderEsp();
 	void ClickThrough(bool v);
 	void DrawLine(ImVec2 a, ImVec2 b, ImColor color, float width);

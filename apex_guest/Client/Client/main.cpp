@@ -1,4 +1,5 @@
 #include "main.h"
+#include "vector.h"
 
 typedef struct player
 {
@@ -15,6 +16,7 @@ typedef struct player
 	int health = 0;
 	int shield = 0;
 	char name[33] = { 0 };
+	Vector single;
 }player;
 
 bool numeric_Hp_Ap = false;
@@ -38,6 +40,9 @@ float smooth = 12.0f;
 float max_fov = 15.0f;
 int bone = 2;
 bool thirdperson = false;
+bool radar = true;
+int radarType = 3;
+
 
 int glowMode = 101;
 int BorderGlowMode = 102;
@@ -146,6 +151,66 @@ void Overlay::RenderEsp()
 		}
 	}
 }
+   
+ImU32 GetU32(int r, int b, int g, int a)
+{
+	return ((a & 0xff) << 24) + ((g & 0xff) << 16) + ((b & 0xff) << 8)
+		+ (r & 0xff);
+}
+
+void Overlay::drawRadar()
+{
+	ImVec2 siz = ImGui::GetWindowSize();
+	ImVec2 pos = ImGui::GetWindowPos();
+	ImGui::SetWindowSize(ImVec2(200, 200));
+	ImDrawList* windowDrawList = ImGui::GetWindowDrawList();
+	windowDrawList->AddLine(ImVec2(pos.x + (siz.x / 2), pos.y + 0), ImVec2(pos.x + (siz.x / 2), pos.y + siz.y), GetU32(255, 255, 255, 255), 1.5f);
+	windowDrawList->AddLine(ImVec2(pos.x + 0, pos.y + (siz.y / 2)), ImVec2(pos.x + siz.x, pos.y + (siz.y / 2)), GetU32(255, 255, 255, 255), 1.5f);
+	ImU32 clr;
+	for(int i = 0; i <= 100;i++)
+	{
+		
+		int s = 4;
+		if(players[i].visible == true)
+		{
+			clr = RED;
+		}
+		else
+		{
+			clr = WHITE;
+		}
+
+		switch (radarType) // 0 - Box; 1 - Filled box; 2 - Circle; 3 - Filled circle;
+		{
+		case 0:
+		{
+			windowDrawList->AddRect(ImVec2(players[i].single.x - s, players[i].single.y - s),ImVec2(players[i].single.x + s, players[i].single.y + s),clr);
+			break;
+		}
+		case 1:
+		{
+			windowDrawList->AddRectFilled(ImVec2(players[i].single.x - s, players[i].single.y - s),
+				ImVec2(players[i].single.x + s, players[i].single.y + s),
+				clr);
+			break;
+		}
+		case 2:
+		{
+			windowDrawList->AddCircle(ImVec2(players[i].single.x, players[i].single.y), s, clr);
+			break;
+		}
+		case 3:
+		{
+			windowDrawList->AddCircleFilled(ImVec2(players[i].single.x, players[i].single.y), s, clr);
+			break;
+		}
+		default:
+			break;
+		}
+	}
+}
+
+
 
 int main(int argc, char** argv)
 {

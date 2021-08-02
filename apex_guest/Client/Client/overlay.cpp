@@ -1,5 +1,6 @@
 #include "overlay.h"
 
+extern bool numeric_Hp_Ap;
 extern int aim;
 extern bool esp;
 extern bool item_glow;
@@ -15,10 +16,9 @@ extern float smooth;
 extern float max_fov;
 extern int bone;
 extern bool thirdperson;
-extern int glowMode;
-extern int BorderGlowMode;
-extern int BorderSize;
-extern int TransparentLevel;
+extern bool radar;
+extern int radarType;
+
 int width;
 int height;
 bool k_leftclick = false;
@@ -79,6 +79,7 @@ static D3DPRESENT_PARAMETERS    g_d3dpp = {};
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
 void ResetDevice();
+
 
 void Overlay::RenderMenu()
 {
@@ -177,9 +178,9 @@ void Overlay::RenderMenu()
 			ImGui::Checkbox(XorStr("Thirdperson"), &thirdperson);
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem(XorStr("Config")))
+		if (ImGui::BeginTabItem(XorStr("Aim Config")))
 		{
-			ImGui::Text(XorStr("Max distance:"));
+			ImGui::Text(XorStr("Max aim distance:"));
 			ImGui::SliderFloat(XorStr("##1"), &max_aim_dist, 100.0f * 40, 800.0f * 40, "%.2f");
 			ImGui::SameLine();
 			ImGui::Text("(%d meters)", (int)(max_aim_dist / 40));
@@ -189,38 +190,29 @@ void Overlay::RenderMenu()
 
 			ImGui::Text(XorStr("Max FOV:"));
 			ImGui::SliderFloat(XorStr("##3"), &max_fov, 5.0f, 250.0f, "%.2f");
-			
+
 			ImGui::Text(XorStr("Aim at (bone id):"));
 			ImGui::SliderInt(XorStr("##4"), &bone, 0, 175);
 			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem(XorStr("Visuals")))
+		if (ImGui::BeginTabItem(XorStr("Esp Config")))
 		{
 			ImGui::Text(XorStr("ESP options:"));
 			ImGui::Checkbox(XorStr("Box"), &v.box);
 			ImGui::SameLine(0, 70.0f);
 			ImGui::Checkbox(XorStr("Name"), &v.name);
 			ImGui::Checkbox(XorStr("Line"), &v.line);
+			ImGui::Checkbox(XorStr("Numeric Health & Shield"), &numeric_Hp_Ap);
 			ImGui::Checkbox(XorStr("Distance"), &v.distance);
 			ImGui::Checkbox(XorStr("Health bar"), &v.healthbar);
 			ImGui::Checkbox(XorStr("Shield bar"), &v.shieldbar);
 			ImGui::EndTabItem();
 		}
-		if(ImGui::BeginTabItem(XorStr("Testing")))
+		if (ImGui::BeginTabItem(XorStr("Radar Config")))
 		{
-			ImGui::Text(XorStr("Testing GlowMode Params:"));
-
-			ImGui::Text(XorStr("GlowMode"));
-			ImGui::SliderInt(XorStr("##1"), &glowMode, 0, 175);
-
-			ImGui::Text(XorStr("BorderGlowMode"));
-			ImGui::SliderInt(XorStr("##2"), &BorderGlowMode, 0, 175);
-
-			ImGui::Text(XorStr("BorderSize"));
-			ImGui::SliderInt(XorStr("##3"), &BorderSize, 0, 175);
-
-			ImGui::Text(XorStr("Max FOV:"));
-			ImGui::SliderInt(XorStr("##4"), &TransparentLevel, 0, 175);
+			ImGui::Checkbox(XorStr("Enabled: "),&radar);
+			ImGui::Text(XorStr("Radar Type:"));
+			ImGui::SliderInt(XorStr("##5"), &radarType, 0, 175);
 		}
 		ImGui::EndTabBar();
 	}
@@ -285,7 +277,7 @@ DWORD Overlay::CreateOverlay()
 	HDC hDC = ::GetWindowDC(NULL);
 	width = ::GetDeviceCaps(hDC, HORZRES);
 	height = ::GetDeviceCaps(hDC, VERTRES);
-		
+
 	running = true;
 
 	// Initialize Direct3D
@@ -371,16 +363,20 @@ DWORD Overlay::CreateOverlay()
 			k_ins = true;
 		}
 		else if (!IsKeyDown(VK_INSERT) && k_ins)
-		{	
+		{
 			k_ins = false;
 		}
-		
-		if(show_menu)
+
+		if (show_menu)
 			RenderMenu();
 		else
 			RenderInfo();
 
 		RenderEsp();
+		if(radar == true)
+		{
+			drawRadar();
+		}
 		// Rendering
 		ImGui::EndFrame();
 		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
@@ -513,6 +509,6 @@ void Overlay::ProgressBar(float x, float y, float w, float h, int value, int v_m
 		25,
 		255
 	);
-	
+
 	RectFilled(x, y, x + w, y + ((h / float(v_max)) * (float)value), barColor, 0.0f, 0);
 }
