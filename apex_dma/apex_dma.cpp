@@ -205,7 +205,7 @@ void DoActions()
 
 					if(player_glow && !Target.isGlowing())
 					{
-						Target.enableGlow(glowShit);
+						Target.enableGlow();
 					}
 					else if(!player_glow && Target.isGlowing())
 					{
@@ -626,17 +626,17 @@ static void set_vars(uint64_t add_addr, uint64_t add_off2)
 	uint64_t thirdperson_addr = 0;
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*17, thirdperson_addr);
 
-	uint64_t glowMode_addr = 0;
-	client_mem.Read<uint64_t>(test, glowMode_addr);
+	//uint64_t glowMode_addr = 0;
+	//client_mem.Read<uint64_t>(test, glowMode_addr);
 
-	uint64_t BorderGlowMode_addr = 0;
-	client_mem.Read<uint64_t>(test + sizeof(uint64_t), BorderGlowMode_addr);	
+	//uint64_t BorderGlowMode_addr = 0;
+	//client_mem.Read<uint64_t>(test + sizeof(uint64_t), BorderGlowMode_addr);	
 	
-	uint64_t BorderSize_addr = 0;
-	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*2, BorderSize_addr);	
+	//uint64_t BorderSize_addr = 0;
+	//client_mem.Read<uint64_t>(test + sizeof(uint64_t)*2, BorderSize_addr);	
 	
-	uint64_t TransparentLevel_addr = 0;
-	client_mem.Read<uint64_t>(test + sizeof(uint64_t)*3, TransparentLevel_addr);	
+	//uint64_t TransparentLevel_addr = 0;
+	//client_mem.Read<uint64_t>(test + sizeof(uint64_t)*3, TransparentLevel_addr);	
 	
 	int tmp = 0;
 	client_mem.Read<int>(spec_addr, tmp);
@@ -674,10 +674,10 @@ static void set_vars(uint64_t add_addr, uint64_t add_off2)
 			client_mem.Read<int>(bone_addr, bone);
 			client_mem.Read<bool>(thirdperson_addr, thirdperson);
 
-			client_mem.Read<int>(glowMode_addr, glowMode);
-			client_mem.Read<int>(BorderGlowMode_addr, BorderGlowMode);
-			client_mem.Read<int>(BorderSize_addr, BorderSize);
-			client_mem.Read<int>(TransparentLevel_addr, TransparentLevel);
+			//client_mem.Read<int>(glowMode_addr, glowMode);
+			//client_mem.Read<int>(BorderGlowMode_addr, BorderGlowMode);
+			//client_mem.Read<int>(BorderSize_addr, BorderSize);
+			//client_mem.Read<int>(TransparentLevel_addr, TransparentLevel);
 
 			if(esp && next)
 			{

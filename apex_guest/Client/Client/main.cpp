@@ -17,6 +17,7 @@ typedef struct player
 	char name[33] = { 0 };
 }player;
 
+bool numeric_Hp_Ap = false;
 int aim_key = VK_MBUTTON;
 bool use_nvidia = true;
 bool active = true;
@@ -32,7 +33,7 @@ bool player_glow = false;
 bool aim_no_recoil = true;
 bool aiming = false; //read
 uint64_t g_Base = 0; //write
-float max_dist = 200.0f*40.0f; //read
+float max_aim_dist = 200.0f*40.0f; //read
 float smooth = 12.0f;
 float max_fov = 15.0f;
 int bone = 2;
@@ -88,19 +89,24 @@ void Overlay::RenderEsp()
 					{
 						if (players[i].visible)
 						{
+							if (v.line)
+								DrawLine(ImVec2((float)(getWidth() / 2), (float)getHeight() / 2), ImVec2(players[i].b_x, players[i].b_y), RED, 1); //LINE FROM MIDDLE SCREEN
+
 							if (players[i].dist < 1600.0f)
+							{
 								DrawBox(RED, players[i].boxMiddle, players[i].h_y, players[i].width, players[i].height); //BOX
+							}
 							else
 								DrawBox(ORANGE, players[i].boxMiddle, players[i].h_y, players[i].width, players[i].height); //BOX
 						}
 						else
 						{
 							DrawBox(WHITE, players[i].boxMiddle, players[i].h_y, players[i].width, players[i].height); //white if player not visible
+							DrawLine(ImVec2((float)(getWidth() / 2), (float)getHeight() / 2), ImVec2(players[i].b_x, players[i].b_y), WHITE, 1); //LINE FROM MIDDLE SCREEN
+
 						}
 					}
 
-					if(v.line)
-						DrawLine(ImVec2((float)(getWidth() / 2), (float)getHeight()), ImVec2(players[i].b_x, players[i].b_y), BLUE, 1); //LINE FROM MIDDLE SCREEN
 
 					if (v.distance)
 					{
@@ -110,13 +116,29 @@ void Overlay::RenderEsp()
 							String(ImVec2(players[i].boxMiddle, (players[i].b_y + 1)), GREEN, distance.c_str());  //DISTANCE
 					}
 
-					if(v.healthbar)
+					if (v.healthbar)
 						ProgressBar((players[i].b_x - (players[i].width / 2.0f) - 4), (players[i].b_y - players[i].height), 3, players[i].height, players[i].health, 100); //health bar
 					if (v.shieldbar)
 						ProgressBar((players[i].b_x + (players[i].width / 2.0f) + 1), (players[i].b_y - players[i].height), 3, players[i].height, players[i].shield, 125); //shield bar
 
-					if(v.name)
-						String(ImVec2(players[i].boxMiddle, (players[i].b_y - players[i].height - 15)), WHITE, players[i].name);
+					if (v.name)
+					{
+						if (numeric_Hp_Ap == true)
+						{
+
+							std::string topText = std::to_string(players[i].health + players[i].shield);
+							const char* s = players[i].name;
+							topText = ": " + topText;
+							topText = s + topText;
+							s = topText.c_str();
+							int offsetText = topText.size() * 2;
+							String(ImVec2(players[i].boxMiddle - offsetText, (players[i].b_y - players[i].height - 15)), WHITE, s);
+						}
+						else
+						{
+							String(ImVec2(players[i].boxMiddle, (players[i].b_y - players[i].height - 15)), WHITE, players[i].name);;
+						}
+					}
 				}
 			}
 
@@ -137,7 +159,7 @@ int main(int argc, char** argv)
 	add[7] = (uintptr_t)&next;
 	add[8] = (uintptr_t)&players[0];
 	add[9] = (uintptr_t)&valid;
-	add[10] = (uintptr_t)&max_dist;
+	add[10] = (uintptr_t)&max_aim_dist;
 	add[11] = (uintptr_t)&item_glow;
 	add[12] = (uintptr_t)&player_glow;
 	add[13] = (uintptr_t)&aim_no_recoil;
@@ -246,15 +268,15 @@ int main(int argc, char** argv)
 
 		if (IsKeyDown(VK_LEFT))
 		{
-			if (max_dist > 100.0f * 40.0f)
-				max_dist -= 50.0f * 40.0f;
+			if (max_aim_dist > 100.0f * 40.0f)
+				max_aim_dist -= 50.0f * 40.0f;
 			std::this_thread::sleep_for(std::chrono::milliseconds(130));
 		}
 
 		if (IsKeyDown(VK_RIGHT))
 		{
-			if (max_dist < 800.0f * 40.0f)
-				max_dist += 50.0f * 40.0f;
+			if (max_aim_dist < 800.0f * 40.0f)
+				max_aim_dist += 50.0f * 40.0f;
 			std::this_thread::sleep_for(std::chrono::milliseconds(130));
 		}
 

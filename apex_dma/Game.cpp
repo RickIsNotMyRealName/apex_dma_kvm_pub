@@ -131,7 +131,7 @@ bool Entity::isZooming()
 	return *(int*)(buffer + OFFSET_ZOOMING) == 1;
 }
 
-void Entity::enableGlow(GlowMode glow)
+void Entity::enableGlow()
 {
 	//apex_mem.Write<GlowMode>(ptr + GLOW_TYPE,glow);
 
@@ -192,7 +192,7 @@ bool Item::isGlowing()
 	return *(int*)(buffer + OFFSET_ITEM_GLOW) == 1363184265;
 }
 
-void Item::enableGlow(GlowMode glow)
+void Item::enableGlow()
 {
 
 
@@ -200,7 +200,7 @@ void Item::enableGlow(GlowMode glow)
 	apex_mem.Write<int>(ptr + OFFSET_GLOW_T2, 1193322764);
 	apex_mem.Write<int>(ptr + OFFSET_GLOW_ENABLE, 7);
 	apex_mem.Write<int>(ptr + OFFSET_GLOW_THROUGH_WALLS, 2);
-	apex_mem.Write<GlowMode>(ptr + GLOW_TYPE, glow);
+	//apex_mem.Write<GlowMode>(ptr + GLOW_TYPE, glow);
 }
 
 void Item::disableGlow()

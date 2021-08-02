@@ -10,7 +10,7 @@ extern bool use_nvidia;
 extern int safe_level;
 extern int spectators;
 extern int allied_spectators;
-extern float max_dist;
+extern float max_aim_dist;
 extern float smooth;
 extern float max_fov;
 extern int bone;
@@ -180,9 +180,9 @@ void Overlay::RenderMenu()
 		if (ImGui::BeginTabItem(XorStr("Config")))
 		{
 			ImGui::Text(XorStr("Max distance:"));
-			ImGui::SliderFloat(XorStr("##1"), &max_dist, 100.0f * 40, 800.0f * 40, "%.2f");
+			ImGui::SliderFloat(XorStr("##1"), &max_aim_dist, 100.0f * 40, 800.0f * 40, "%.2f");
 			ImGui::SameLine();
-			ImGui::Text("(%d meters)", (int)(max_dist / 40));
+			ImGui::Text("(%d meters)", (int)(max_aim_dist / 40));
 
 			ImGui::Text(XorStr("Smooth aim value:"));
 			ImGui::SliderFloat(XorStr("##2"), &smooth, 12.0f, 150.0f, "%.2f");
