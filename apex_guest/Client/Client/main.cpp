@@ -42,18 +42,13 @@ int bone = 2;
 bool thirdperson = false;
 bool radar = true;
 int radarType = 3;
-
-
-int glowMode = 101;
-int BorderGlowMode = 102;
-int BorderSize = 46;
-int TransparentLevel = 96;
+int radarAlpha = 255;
+bool resetRadar = true;
 
 bool valid = false; //write
 bool next = false; //read write
 
 uint64_t add[22];
-uint64_t add2[4];
 
 bool k_f5 = 0;
 bool k_f6 = 0;
@@ -160,54 +155,70 @@ ImU32 GetU32(int r, int b, int g, int a)
 
 void Overlay::drawRadar()
 {
-	ImVec2 siz = ImGui::GetWindowSize();
-	ImVec2 pos = ImGui::GetWindowPos();
-	ImGui::SetWindowSize(ImVec2(200, 200));
-	ImDrawList* windowDrawList = ImGui::GetWindowDrawList();
-	windowDrawList->AddLine(ImVec2(pos.x + (siz.x / 2), pos.y + 0), ImVec2(pos.x + (siz.x / 2), pos.y + siz.y), GetU32(255, 255, 255, 255), 1.5f);
-	windowDrawList->AddLine(ImVec2(pos.x + 0, pos.y + (siz.y / 2)), ImVec2(pos.x + siz.x, pos.y + (siz.y / 2)), GetU32(255, 255, 255, 255), 1.5f);
-	ImU32 clr;
-	for(int i = 0; i <= 100;i++)
+	ImGuiStyle& style = ImGui::GetStyle();
+	ImVec2 oldPadding = style.WindowPadding;
+	float oldAlpha = style.Colors[ImGuiCol_WindowBg].w;
+	style.WindowPadding = ImVec2(0, 0);
+	ImGui::GetStyle().Alpha = (float)radarAlpha / 255.0f;
+	if(radar)
 	{
+		ImVec2 siz = ImGui::GetWindowSize();
+		ImVec2 pos = ImGui::GetWindowPos();
+		if (resetRadar)
+		{
+			ImGui::SetWindowSize(ImVec2(200, 200));
+			resetRadar = false;
+		}
 		
-		int s = 4;
-		if(players[i].visible == true)
+		ImDrawList* windowDrawList = ImGui::GetWindowDrawList();
+		windowDrawList->AddLine(ImVec2(pos.x + (siz.x / 2), pos.y + 0), ImVec2(pos.x + (siz.x / 2), pos.y + siz.y), GetU32(255, 255, 255, 255), 1.5f);
+		windowDrawList->AddLine(ImVec2(pos.x + 0, pos.y + (siz.y / 2)), ImVec2(pos.x + siz.x, pos.y + (siz.y / 2)), GetU32(255, 255, 255, 255), 1.5f);	
+	
+		ImU32 clr;
+		for(int i = 0; i <= 100;i++)
 		{
-			clr = RED;
-		}
-		else
-		{
-			clr = WHITE;
-		}
+		
+			int s = 4;
+			if(players[i].visible == true)
+			{
+				clr = RED;
+			}
+			else
+			{
+				clr = WHITE;
+			}
 
-		switch (radarType) // 0 - Box; 1 - Filled box; 2 - Circle; 3 - Filled circle;
-		{
-		case 0:
-		{
-			windowDrawList->AddRect(ImVec2(players[i].single.x - s, players[i].single.y - s),ImVec2(players[i].single.x + s, players[i].single.y + s),clr);
-			break;
-		}
-		case 1:
-		{
-			windowDrawList->AddRectFilled(ImVec2(players[i].single.x - s, players[i].single.y - s),
-				ImVec2(players[i].single.x + s, players[i].single.y + s),
-				clr);
-			break;
-		}
-		case 2:
-		{
-			windowDrawList->AddCircle(ImVec2(players[i].single.x, players[i].single.y), s, clr);
-			break;
-		}
-		case 3:
-		{
-			windowDrawList->AddCircleFilled(ImVec2(players[i].single.x, players[i].single.y), s, clr);
-			break;
-		}
-		default:
-			break;
+			switch (radarType) // 0 - Box; 1 - Filled box; 2 - Circle; 3 - Filled circle;
+			{
+			case 0:
+			{
+				windowDrawList->AddRect(ImVec2(players[i].single.x - s, players[i].single.y - s),ImVec2(players[i].single.x + s, players[i].single.y + s),clr);
+				break;
+			}
+			case 1:
+			{
+				windowDrawList->AddRectFilled(ImVec2(players[i].single.x - s, players[i].single.y - s),
+					ImVec2(players[i].single.x + s, players[i].single.y + s),
+					clr);
+				break;
+			}
+			case 2:
+			{
+				windowDrawList->AddCircle(ImVec2(players[i].single.x, players[i].single.y), s, clr);
+				break;
+			}
+			case 3:
+			{
+				windowDrawList->AddCircleFilled(ImVec2(players[i].single.x, players[i].single.y), s, clr);
+				break;
+			}
+			default:
+				break;
+			}
 		}
 	}
+	style.WindowPadding = oldPadding;
+	ImGui::GetStyle().Alpha = oldAlpha;
 }
 
 
@@ -232,13 +243,9 @@ int main(int argc, char** argv)
 	add[15] = (uintptr_t)&max_fov;
 	add[16] = (uintptr_t)&bone;
 	add[17] = (uintptr_t)&thirdperson;
-	add2[0] = (uintptr_t)&glowMode;
-	add2[1] = (uintptr_t)&BorderGlowMode;
-	add2[2] = (uintptr_t)&BorderSize;
-	add2[3] = (uintptr_t)&TransparentLevel;
+
 	
 	printf(XorStr("add offset: 0x%I64x\n"), (uint64_t)&add[0] - (uint64_t)GetModuleHandle(NULL));
-	printf(XorStr("add offset: 0x%I64x\n"), (uint64_t)&add2[0] - (uint64_t)GetModuleHandle(NULL));
 	Overlay ov1 = Overlay();
 	ov1.Start();
 	printf(XorStr("Waiting for host process...\n"));

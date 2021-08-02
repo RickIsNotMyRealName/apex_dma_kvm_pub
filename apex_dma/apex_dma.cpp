@@ -46,10 +46,6 @@ bool aiming = false;
 extern float smooth;
 extern int bone;
 bool thirdperson = false;
-int glowMode = 101;
-int BorderGlowMode = 102;
-int BorderSize = 46;
-int TransparentLevel = 96;
 
 bool actions_t = false;
 bool esp_t = false;
@@ -163,7 +159,6 @@ void DoActions()
 		bool tmp_thirdperson = false;
 		while (g_Base!=0 && c_Base!=0)
 		{
-			GlowMode glowShit ={glowMode,BorderGlowMode,BorderSize,TransparentLevel};
 			std::this_thread::sleep_for(std::chrono::milliseconds(30));	
 			if(thirdperson && !tmp_thirdperson)
 			{
@@ -507,7 +502,8 @@ static void EspLoop()
 							float boxMiddle = bs.x - (width / 2.0f);
 							int health = Target.getHealth();
 							int shield = Target.getShield();
-							Vector rotate_Poiont = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y,2.f,false);
+							bool checkVeiw = false;
+							Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y,2.f, &checkVeiw);
 							players[i] =
 							{
 								dist,
@@ -522,8 +518,8 @@ static void EspLoop()
 								(Target.lastVisTime() > lastvis_esp[i]),
 								health,
 								shield,
-								rotate_Poiont
 							};
+							players[i].single = rotate_Point;
 							Target.get_name(g_Base, i-1, &players[i].name[0]);
 							lastvis_esp[i] = Target.lastVisTime();
 							valid = true;
@@ -608,9 +604,8 @@ static void AimbotLoop()
 	aim_t = false;
 }
 
-static void set_vars(uint64_t add_addr, uint64_t add_off2)
+static void set_vars(uint64_t add_addr)
 {
-	uint64_t test = add_off2;
 	printf("Reading client vars...\n");
 	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	//Get addresses of client vars
@@ -649,19 +644,7 @@ static void set_vars(uint64_t add_addr, uint64_t add_off2)
 	uint64_t bone_addr = 0;
 	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*16, bone_addr);
 	uint64_t thirdperson_addr = 0;
-	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*17, thirdperson_addr);
-
-	//uint64_t glowMode_addr = 0;
-	//client_mem.Read<uint64_t>(test, glowMode_addr);
-
-	//uint64_t BorderGlowMode_addr = 0;
-	//client_mem.Read<uint64_t>(test + sizeof(uint64_t), BorderGlowMode_addr);	
-	
-	//uint64_t BorderSize_addr = 0;
-	//client_mem.Read<uint64_t>(test + sizeof(uint64_t)*2, BorderSize_addr);	
-	
-	//uint64_t TransparentLevel_addr = 0;
-	//client_mem.Read<uint64_t>(test + sizeof(uint64_t)*3, TransparentLevel_addr);	
+	client_mem.Read<uint64_t>(add_addr + sizeof(uint64_t)*17, thirdperson_addr);	
 	
 	int tmp = 0;
 	client_mem.Read<int>(spec_addr, tmp);
@@ -735,7 +718,6 @@ static void item_glow_t()
 		while(g_Base!=0 && c_Base!=0)
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
-			GlowMode glowShit = { glowMode,BorderGlowMode,BorderSize,TransparentLevel };
 			uint64_t entitylist = g_Base + OFFSET_ENTITYLIST;
 			if (item_glow)
 			{
@@ -752,7 +734,7 @@ static void item_glow_t()
 					if(item.isItem() && !item.isGlowing())
 					{
 						item.enableGlow();
-						printf("glowMode: %i, BorderGlowMode: %i,BorderSize: %i,TransparentLevel: %i, \n", glowMode,BorderGlowMode,BorderSize,TransparentLevel);
+						
 						//printf("Item: %lx\n", name);
 
 					}
@@ -799,7 +781,6 @@ int main(int argc, char *argv[])
 
 	//Client "add" offset
 	uint64_t add_off = 0x3e8b0;
-	uint64_t add_off2 = 0x3c940;
 
 
 	std::thread aimbot_thr;
@@ -872,7 +853,7 @@ int main(int argc, char *argv[])
 				printf("\nClient process found\n");
 				printf("Base: %lx\n", c_Base);
 
-				vars_thr = std::thread(set_vars, c_Base + add_off, c_Base + add_off2);
+				vars_thr = std::thread(set_vars, c_Base + add_off);
 				vars_thr.detach();
 			}
 		}
