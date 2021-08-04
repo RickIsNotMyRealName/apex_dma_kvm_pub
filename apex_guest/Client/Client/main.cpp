@@ -42,7 +42,8 @@ int bone = 2;
 bool thirdperson = false;
 Vector radarPos = {0.f, 0.f, 0.f};
 Vector radarSiz = {0.f, 0.f, 0.f};
-float zoom = 1.5;
+float zoom = 0.31;
+int radarBlipSize = 4;
 
 bool radar = true;
 int radarType = 3;
@@ -162,12 +163,18 @@ void Overlay::drawRadar()
 	ImGuiStyle& style = ImGui::GetStyle();
 	ImVec2 oldPadding = style.WindowPadding;
 	float oldAlpha = style.Colors[ImGuiCol_WindowBg].w;
+	ImGui::Begin(XorStr("##radar"), (bool*)true, ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoBackground);
 	style.WindowPadding = ImVec2(0, 0);
 	ImGui::GetStyle().Alpha = (float)radarAlpha / 255.0f;
 	if(radar)
 	{
 		ImVec2 siz = ImGui::GetWindowSize();
 		ImVec2 pos = ImGui::GetWindowPos();
+		if(siz.x<100&&siz.y<100)
+		{
+			ImGui::SetWindowSize(ImVec2(100,100));
+			ImGui::SetWindowPos(ImVec2(pos.x + 50,pos.y+50));
+		}
 		radarPos.x = pos.x;
 		radarPos.y = pos.y;
 		radarSiz.x = siz.x;
@@ -186,7 +193,7 @@ void Overlay::drawRadar()
 		for(int i = 0; i <= 100;i++)
 		{
 		
-			int s = 1;
+			int s = radarBlipSize;
 			if(players[i].visible == true)
 			{
 				clr = RED;
