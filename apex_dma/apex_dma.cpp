@@ -551,188 +551,81 @@ static void radarLoop()
 {
 	while(true)
 	{
-				uint64_t LocalPlayer = 0;
-				apex_mem.Read<uint64_t>(g_Base + OFFSET_LOCAL_ENT, LocalPlayer);
-				if (LocalPlayer == 0)
-				{
-					std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		uint64_t LocalPlayer = 0;
+		apex_mem.Read<uint64_t>(g_Base + OFFSET_LOCAL_ENT, LocalPlayer);
+		if (LocalPlayer == 0)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-					continue;
-				}
-				Entity LPlayer = getEntity(LocalPlayer);
-				int team_player = LPlayer.getTeamId();
-				if (team_player < 0 || team_player>50)
-				{
-					std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			continue;
+		}
+		Entity LPlayer = getEntity(LocalPlayer);
+		int team_player = LPlayer.getTeamId();
+		if (team_player < 0 || team_player>50)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-					continue;
-				}
-				Vector LocalPlayerPosition = LPlayer.getPosition();
+			continue;
+		}
+		Vector LocalPlayerPosition = LPlayer.getPosition();
 
 
-				uint64_t entitylist = g_Base + OFFSET_ENTITYLIST;
+		uint64_t entitylist = g_Base + OFFSET_ENTITYLIST;
 				
-				memset(players,0,sizeof(players));
-				if(true)
+		memset(players,0,sizeof(players));
+					
+		if(true)
+		{
+			xAxis_Radar = radarPos.x;
+			yAxis_Radar = radarPos.y;
+			width_Radar = radarSiz.x;
+			height_Radar = radarSiz.y;
+
+			for (int i = 0; i < toRead; i++)
+			{
+				uint64_t centity = 0;
+				apex_mem.Read<uint64_t>( entitylist + ((uint64_t)i << 5), centity);
+				if (centity == 0)
 				{
-					int c=0;
-					for (int i = 0; i < 100; i++)
-					{
-						uint64_t centity = 0;
-						apex_mem.Read<uint64_t>( entitylist + ((uint64_t)i << 5), centity);
-						if (centity == 0)
-						{
-							continue;
-						}		
+					continue;
+				}
 						
-						if (LocalPlayer == centity)
-						{
-							continue;
-						}
-
-						Entity Target = getEntity(centity);
-
-						if (!Target.isDummy())
-						{
-							continue;
-						}
-
-						if (!Target.isAlive())
-						{
-							continue;
-						}
-						int entity_team = Target.getTeamId();
-
-						Vector EntityPosition = Target.getPosition();
-						float dist = LocalPlayerPosition.DistTo(EntityPosition);
-						if (dist > ma || dist < 50.0f)
-						{	
-							continue;
-						}
-						
-						Vector bs = Vector();
-						WorldToScreen(EntityPosition, m.matrix, 1920, 1080, bs);
-						if (bs.x > 0 && bs.y > 0)
-						{
-							Vector hs = Vector();
-							Vector HeadPosition = Target.getBonePosition(8);
-							WorldToScreen(HeadPosition, m.matrix, 1920, 1080, hs);
-							float height = abs(abs(hs.y) - abs(bs.y));
-							float width = height / 2.0f;
-							float boxMiddle = bs.x - (width / 2.0f);
-							int health = Target.getHealth();
-							int shield = Target.getShield();
-							players[c] = 
-							{
-								dist,
-								entity_team,
-								boxMiddle,
-								hs.y,
-								width,
-								height,
-								bs.x,
-								bs.y,
-								0,
-								(Target.lastVisTime() > lastvis_esp[c]),
-								health,
-								shield	
-							};
-							Target.get_name(g_Base, i-1, &players[c].name[0]);
-							lastvis_esp[c] = Target.lastVisTime();
-							valid = true;
-							c++;
-						}
-					}
-				}	
-				else
+				if (LocalPlayer == centity)
 				{
-					xAxis_Radar = radarPos.x;
-					yAxis_Radar = radarPos.y;
-					width_Radar = radarSiz.x;
-					height_Radar = radarSiz.y;
-
-					for (int i = 0; i < toRead; i++)
-					{
-						uint64_t centity = 0;
-						apex_mem.Read<uint64_t>( entitylist + ((uint64_t)i << 5), centity);
-						if (centity == 0)
-						{
-							continue;
-						}
-						
-						if (LocalPlayer == centity)
-						{
-							continue;
-						}
-
-						Entity Target = getEntity(centity);
-						
-						if (!Target.isPlayer())
-						{
-							continue;
-						}
-
-						if (!Target.isAlive())
-						{
-							continue;
-						}
-
-						int entity_team = Target.getTeamId();
-						if (entity_team < 0 || entity_team>50 || entity_team == team_player)
-						{
-							continue;
-						}
-
-						Vector EntityPosition = Target.getPosition();
-						float dist = LocalPlayerPosition.DistTo(EntityPosition);
-						if (dist > max_dist || dist < 50.0f)
-						{	
-							continue;
-						}
-
-						Vector bs = Vector();
-						WorldToScreen(EntityPosition, m.matrix, 1920, 1080, bs);
-						if (bs.x > 0 && bs.y > 0)
-						{
-							Vector hs = Vector();
-							Vector HeadPosition = Target.getBonePosition(8);
-							WorldToScreen(HeadPosition, m.matrix, 1920, 1080, hs);
-							float height = abs(abs(hs.y) - abs(bs.y));
-							float width = height / 2.0f;
-							float boxMiddle = bs.x - (width / 2.0f);
-							int health = Target.getHealth();
-							int shield = Target.getShield();
-							bool checkVeiw = false;
-							Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y, zoom, &checkVeiw);
-							players[i] =
-							{
-								dist,
-								entity_team,
-								boxMiddle,
-								hs.y,
-								width,
-								height,
-								bs.x,
-								bs.y,
-								Target.isKnocked(),
-								(Target.lastVisTime() > lastvis_esp[i]),
-								health,
-								shield,
-							};
-							players[i].single = rotate_Point;
-							Target.get_name(g_Base, i-1, &players[i].name[0]);
-							lastvis_esp[i] = Target.lastVisTime();
-							valid = true;
-						}
-					}
+					continue;
 				}
 
-				next = true;
-				while(next && g_Base!=0 && c_Base!=0 && esp)
+				Entity Target = getEntity(centity);
+						
+				if (!Target.isPlayer())
 				{
-					std::this_thread::sleep_for(std::chrono::milliseconds(1));
+					continue;
 				}
+
+				if (!Target.isAlive())
+				{
+					continue;
+				}
+
+				int entity_team = Target.getTeamId();
+				if (entity_team < 0 || entity_team>50)
+				{
+					continue;
+				}
+
+				Vector EntityPosition = Target.getPosition();
+				float dist = LocalPlayerPosition.DistTo(EntityPosition);
+				if (dist > maxRadarDist)
+				{	
+					continue;
+				}
+				bool checkVeiw = false;
+				Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y, zoom, &checkVeiw);
+				players[i].single = rotate_Point;
+						
+					
 			}
+		}
 	}
 }
 
