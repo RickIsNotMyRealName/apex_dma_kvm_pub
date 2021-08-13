@@ -82,6 +82,10 @@ bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
 void ResetDevice();
 
+void Overlay::renderPotSpectators
+{
+	
+}
 
 void Overlay::RenderMenu()
 {

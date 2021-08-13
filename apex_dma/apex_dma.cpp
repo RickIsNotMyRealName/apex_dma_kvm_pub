@@ -80,7 +80,14 @@ typedef struct player
 	Vector single;
 }player;
 
+typedef struct spectators
+{
+	char name[33] = { 0 };
+	int entTeam = -1;
+	int index = -1;
+}
 
+//std::vector<spectators> killed
 
 struct Matrix
 {
