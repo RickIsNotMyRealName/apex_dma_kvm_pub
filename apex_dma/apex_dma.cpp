@@ -518,8 +518,8 @@ static void EspLoop()
 							float boxMiddle = bs.x - (width / 2.0f);
 							int health = Target.getHealth();
 							int shield = Target.getShield();
-							//bool checkVeiw = false;
-							//Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y, zoom, &checkVeiw);
+							bool checkVeiw = false;
+							Vector rotate_Point = RotatePoint(EntityPosition,LocalPlayerPosition,xAxis_Radar,yAxis_Radar,width_Radar,height_Radar,LPlayer.GetViewAngles().y, zoom, &checkVeiw);
 							players[i] =
 							{
 								dist,
@@ -535,7 +535,7 @@ static void EspLoop()
 								health,
 								shield,
 							};
-							//players[i].single = rotate_Point;
+							players[i].single = rotate_Point;
 							Target.get_name(g_Base, i-1, &players[i].name[0]);
 							lastvis_esp[i] = Target.lastVisTime();
 							valid = true;
@@ -556,7 +556,7 @@ static void EspLoop()
 
 static void radarLoop()
 {
-	while(true)
+	while(false)
 	{
 		uint64_t LocalPlayer = 0;
 		apex_mem.Read<uint64_t>(g_Base + OFFSET_LOCAL_ENT, LocalPlayer);
@@ -888,7 +888,7 @@ int main(int argc, char *argv[])
 	std::thread actions_thr;
 	std::thread itemglow_thr;
 	std::thread vars_thr;
-	std::thread radar_thr;
+	//std::thread radar_thr;
 	while(active)
 	{
 		if(apex_mem.get_proc_status() != process_status::FOUND_READY)
@@ -905,7 +905,7 @@ int main(int argc, char *argv[])
 				esp_thr.~thread();
 				actions_thr.~thread();
 				itemglow_thr.~thread();
-				radar_thr.~thread();
+				//radar_thr.~thread();
 			}
 
 			std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -923,12 +923,12 @@ int main(int argc, char *argv[])
 				esp_thr = std::thread(EspLoop);
 				actions_thr = std::thread(DoActions);
 				itemglow_thr = std::thread(item_glow_t);
-				radar_thr = std::thread(radarLoop);
+				//radar_thr = std::thread(radarLoop);
 				aimbot_thr.detach();
 				esp_thr.detach();
 				actions_thr.detach();
 				itemglow_thr.detach();
-				radar_thr.detach();
+				//radar_thr.detach();
 			}
 		}
 		else
