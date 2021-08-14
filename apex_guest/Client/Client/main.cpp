@@ -1,5 +1,6 @@
 #include "main.h"
 #include "vector.h"
+#include "xBoxController.h"
 
 typedef struct player
 {
@@ -19,6 +20,7 @@ typedef struct player
 	Vector single;
 }player;
 
+
 bool numeric_Hp_Ap = false;
 int aim_key = VK_MBUTTON;
 bool use_nvidia = true;
@@ -36,6 +38,7 @@ bool aim_no_recoil = false;
 bool aiming = false; //read
 uint64_t g_Base = 0; //write
 float max_aim_dist = 200.0f*40.0f; //read
+float max_esp_dist = 200.0f*40.0f;
 float smooth = 150.0f;
 float max_fov = 15.0f;
 int bone = 2;
@@ -52,7 +55,7 @@ bool resetRadar = true;
 
 bool valid = false; //write
 bool next = false; //read write
-
+bool kbm = false;
 uint64_t add[20];
 
 bool k_f5 = 0;
@@ -60,10 +63,13 @@ bool k_f6 = 0;
 bool k_f7 = 0;
 bool k_f8 = 0;
 
+CXBOXController* controller;
+
 bool IsKeyDown(int vk)
 {
 	return (GetAsyncKeyState(vk) & 0x8000) != 0;
 }
+
 
 player players[100];
 
@@ -280,7 +286,9 @@ int main(int argc, char** argv)
 		ready = true;
 		printf(XorStr("Ready\n"));
 	}
-		
+	
+	controller = new CXBOXController(1);
+
 	while (active)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -369,10 +377,26 @@ int main(int argc, char** argv)
 			std::this_thread::sleep_for(std::chrono::milliseconds(130));
 		}
 
-		if (IsKeyDown(aim_key))
-			aiming = true;
+		if(controller->IsConnected())
+		{
+
+			if(controller->GetState().Gamepad.bLeftTrigger)
+			{
+				aiming = true;
+			}
+			else
+			{
+				aiming = false;
+			}
+		}
+		
 		else
-			aiming = false;
+		{
+			if (IsKeyDown(aim_key))
+				aiming = true;
+			else
+				aiming = false;
+		}
 	}
 	ready = false;
 	ov1.Clear();

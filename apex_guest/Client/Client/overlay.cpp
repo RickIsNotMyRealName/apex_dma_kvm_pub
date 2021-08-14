@@ -12,6 +12,7 @@ extern int safe_level;
 extern int spectators;
 extern int allied_spectators;
 extern float max_aim_dist;
+extern float max_esp_dist;
 extern float smooth;
 extern float max_fov;
 extern int bone;
@@ -204,6 +205,8 @@ void Overlay::RenderMenu()
 		if (ImGui::BeginTabItem(XorStr("Esp Config")))
 		{
 			ImGui::Text(XorStr("ESP options:"));
+			ImGui::Text(XorStr("Max ESP distance"))
+			ImGui::SliderFloat(XorStr("##1"), &max_esp_dist, 100.f *40, 800.f*40, "%.2f");
 			ImGui::Checkbox(XorStr("Box"), &v.box);
 			ImGui::SameLine(0, 70.0f);
 			ImGui::Checkbox(XorStr("Name"), &v.name);
